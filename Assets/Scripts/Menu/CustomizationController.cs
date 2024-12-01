@@ -22,12 +22,14 @@ public class CustomizationController : MonoBehaviour
         mechSelection.gameObject.SetActive(false);
         mech.SetActive(false);
         primarySelection.gameObject.SetActive(true);
+        primary.SetActive(true);
     }
 
     private void onPrimarySubmission() {
         primarySelection.gameObject.SetActive(false);
         primary.SetActive(false);
         secondarySelection.gameObject.SetActive(true);
+        secondary.SetActive(true);
     }
     
     private void onSecondarySubmission()
