@@ -34,25 +34,10 @@ public class amaise : MonoBehaviour
             {
                 transform.position = hit.position;  
             }
-            else
-            {
-                Debug.LogError("Amaise is not placed on a NavMesh!");
-            }
-        }
-        else
-        {
-            Debug.LogError("NavMeshAgent component missing on Amaise!");
         }
 
         GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            target = player.transform;
-        }
-        else
-        {
-            Debug.LogError("Player not found in the scene!");
-        }
+        target = player.transform;
     }
 
     void Update()
@@ -65,8 +50,15 @@ public class amaise : MonoBehaviour
             if (distanceToTarget <= attackRange)
             {
                 //AttemptAttack();
+                //SelfDestruct();
             }
         }
+        Debug.Log("Current health is " + currHealth);
+    }
+
+    private void SelfDestruct()
+    {
+        TakeDamage(currHealth);
     }
 
     private void AttemptAttack()
