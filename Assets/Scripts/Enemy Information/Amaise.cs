@@ -6,8 +6,6 @@ using UnityEngine.UIElements;
 
 public class amaise : MonoBehaviour
 {
-    public AmaiseStats stats;
-
     private int currHealth;
     private float moveSpeed;
     private int damage;
@@ -21,11 +19,10 @@ public class amaise : MonoBehaviour
 
     void Start()
     {
-        currHealth = stats.health;
-        moveSpeed = 100;
-        damage = stats.damage;
-        health = stats.health;
-        attackCooldown = stats.attackCooldown;
+        currHealth = 100;
+        moveSpeed = 200;
+        damage = 5;
+        attackCooldown = 5f;
 
         agent = GetComponent<NavMeshAgent>();
         if (agent != null)
