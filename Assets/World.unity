@@ -626,20 +626,6 @@ MonoBehaviour:
   jumpForce: 50
   rotationSpeed: 500
   drag: 10
---- !u!114 &546791229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184355042}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54aad37ce9f98944eb647b901f498e29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
-  maxHealth: 2
 --- !u!54 &546791231
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3098,9 +3084,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9189308406731576782, guid: 03658f22e09d3364bb860a02d911cc62, type: 3}
       insertIndex: -1
       addedObject: {fileID: 546791228}
-    - targetCorrespondingSourceObject: {fileID: 9189308406731576782, guid: 03658f22e09d3364bb860a02d911cc62, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 546791229}
     - targetCorrespondingSourceObject: {fileID: 9189308406731576782, guid: 03658f22e09d3364bb860a02d911cc62, type: 3}
       insertIndex: -1
       addedObject: {fileID: 546791231}
