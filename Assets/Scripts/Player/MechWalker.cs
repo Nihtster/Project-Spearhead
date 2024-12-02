@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MechWalker : MonoBehaviour
@@ -10,6 +9,11 @@ public class MechWalker : MonoBehaviour
     public float stepHeight = 0.5f; // How high the legs lift while stepping
     public float stepDuration = 0.25f; // How long a step takes
     public float strideLength = 2.0f; // Distance before a leg takes a step
+
+    [Header("Ground Detection")]
+    public LayerMask groundLayer; // Layer mask for the ground
+    public float raycastDistance = 5f; // Maximum raycast distance
+    public float stepHeightOffset = 0.1f; // Offset above ground to prevent clipping
 
     private Vector3[] defaultPositions; // Default positions relative to the hint objects
     private Vector3[] currentTargets; // Current targets for each leg
@@ -57,7 +61,16 @@ public class MechWalker : MonoBehaviour
         // Calculate the desired position relative to the leg's hint object
         Vector3 hintWorldPosition = legHints[legIndex].TransformPoint(defaultPositions[legIndex]);
         Vector3 forwardOffset = transform.forward * strideLength / 2; // Adjust stride length based on movement direction
-        return hintWorldPosition + forwardOffset;
+        Vector3 targetPosition = hintWorldPosition + forwardOffset;
+
+        // Use raycasting to adjust the target position based on the terrain
+        Ray ray = new Ray(targetPosition + Vector3.up * raycastDistance, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance * 2, groundLayer))
+        {
+            targetPosition = hit.point + Vector3.up * stepHeightOffset; // Adjust for ground height
+        }
+
+        return targetPosition;
     }
 
     System.Collections.IEnumerator MoveLeg(int legIndex, Vector3 targetPosition)
