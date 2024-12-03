@@ -10,4 +10,5 @@ public class AmaiseStats : ScriptableObject
     public int damage;
     public int health;
     public float attackCooldown;
+    public float attackRange;
 }
