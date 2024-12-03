@@ -9,6 +9,7 @@ public class PrimaryController : MonoBehaviour
 
     [SerializeField] private int numMags;
     [SerializeField] private int magSize;
+    [SerializeField] private int roundsLeft;
     [SerializeField] private float fireRate; // cooldown between shots (in seconds)
     [SerializeField] private float reloadTime; // in seconds
     [SerializeField] private float DMG;
@@ -27,4 +28,8 @@ public class PrimaryController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
             fire();
     }
+
+    public int getMagsLeft() {return numMags;}
+
+    public int getRoundsLeft() {return roundsLeft;}
 }
