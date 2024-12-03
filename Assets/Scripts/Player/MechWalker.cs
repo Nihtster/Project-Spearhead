@@ -17,19 +17,22 @@ public class MechWalker : MonoBehaviour
 
     private Vector3[] defaultPositions; // Default positions relative to the hint objects
     private Vector3[] currentTargets; // Current targets for each leg
+    private Vector3[] predictedTargets; // Predicted next step positions
     private bool[] legInMotion; // Track whether each leg is moving
 
-    // Define step order for a trot gait (diagonal pairs)
-    private int[] stepOrder = new int[] { 0, 3, 1, 2 }; // 0 = Front Left, 3 = Back Right, 1 = Front Right, 2 = Back Left
+    private Vector3 previousPosition; // For manual velocity calculation
+    private int[] stepOrder = new int[] { 0, 3, 1, 2 }; // Gait sequence (trot)
 
-    void Start()
+    public void Start()
     {
         // Initialize arrays
         defaultPositions = new Vector3[legTargets.Length];
         currentTargets = new Vector3[legTargets.Length];
+        predictedTargets = new Vector3[legTargets.Length];
         legInMotion = new bool[legTargets.Length];
+        previousPosition = transform.position;
 
-        // Calculate and store default positions relative to each leg's hint
+        // Store default positions relative to each leg's hint
         for (int i = 0; i < legTargets.Length; i++)
         {
             defaultPositions[i] = legHints[i].InverseTransformPoint(legTargets[i].position);
@@ -37,18 +40,24 @@ public class MechWalker : MonoBehaviour
         }
     }
 
-    void Update()
+    public void Update()
     {
-        // Process legs in the defined step order for alternating gait
+        // Calculate velocity based on position change
+        Vector3 mechVelocity = (transform.position - previousPosition) / Time.deltaTime;
+        previousPosition = transform.position;
+
+        // Process legs in the defined step order for a trotting gait
         foreach (int legIndex in stepOrder)
         {
             if (!legInMotion[legIndex])
             {
-                // Calculate the target position for the leg relative to its hint
-                Vector3 targetPosition = CalculateTargetPosition(legIndex);
+                Vector3 targetPosition = CalculateTargetPosition(legIndex, mechVelocity);
 
-                // If the target position is far enough from the current position, initiate a step
-                if (Vector3.Distance(targetPosition, currentTargets[legIndex]) > strideLength)
+                // Store predicted target for visualization
+                predictedTargets[legIndex] = targetPosition;
+
+                // If the target position is far enough, initiate a step
+                if (Vector3.Distance(currentTargets[legIndex], targetPosition) > strideLength)
                 {
                     StartCoroutine(MoveLeg(legIndex, targetPosition));
                 }
@@ -56,14 +65,14 @@ public class MechWalker : MonoBehaviour
         }
     }
 
-    Vector3 CalculateTargetPosition(int legIndex)
+    Vector3 CalculateTargetPosition(int legIndex, Vector3 mechVelocity)
     {
         // Calculate the desired position relative to the leg's hint object
         Vector3 hintWorldPosition = legHints[legIndex].TransformPoint(defaultPositions[legIndex]);
-        Vector3 forwardOffset = transform.forward * strideLength / 2; // Adjust stride length based on movement direction
+        Vector3 forwardOffset = mechVelocity.normalized * strideLength / 2; // Predict forward placement
         Vector3 targetPosition = hintWorldPosition + forwardOffset;
 
-        // Use raycasting to adjust the target position based on the terrain
+        // Use raycasting to adjust for ground height
         Ray ray = new Ray(targetPosition + Vector3.up * raycastDistance, Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance * 2, groundLayer))
         {
@@ -73,7 +82,7 @@ public class MechWalker : MonoBehaviour
         return targetPosition;
     }
 
-    System.Collections.IEnumerator MoveLeg(int legIndex, Vector3 targetPosition)
+    IEnumerator MoveLeg(int legIndex, Vector3 targetPosition)
     {
         legInMotion[legIndex] = true;
 
@@ -88,6 +97,14 @@ public class MechWalker : MonoBehaviour
 
             // Add an arc to the motion for stepping
             interpolatedPosition.y += Mathf.Sin(t * Mathf.PI) * stepHeight;
+
+            // Raycast to adjust the foot height
+            Ray ray = new Ray(interpolatedPosition + Vector3.up * raycastDistance, Vector3.down);
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance * 2, groundLayer))
+            {
+                // Adjust position to the ground
+                interpolatedPosition = hit.point + Vector3.up * stepHeightOffset;
+            }
 
             // Update the IK target position
             legTargets[legIndex].position = interpolatedPosition;
@@ -104,5 +121,17 @@ public class MechWalker : MonoBehaviour
 
         // Introduce a small delay between steps to synchronize the gait
         yield return new WaitForSeconds(0.05f);
+    }
+
+    // Visualize predicted targets for debugging
+    private void OnDrawGizmos()
+    {
+        if (predictedTargets == null) return;
+
+        Gizmos.color = Color.red;
+        foreach (Vector3 predictedTarget in predictedTargets)
+        {
+            Gizmos.DrawSphere(predictedTarget, 0.2f);
+        }
     }
 }
