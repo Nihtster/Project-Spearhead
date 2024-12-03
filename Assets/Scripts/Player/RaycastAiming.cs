@@ -75,7 +75,7 @@ public class RaycastAiming : MonoBehaviour
             sphereIndicatorCannon.SetActive(true);
 
             // Debug output for cannon hit
-            Debug.Log("Cannon hit: " + hitCannon.collider.name);
+            //Debug.Log("Cannon hit: " + hitCannon.collider.name);
         }
         else
         {
