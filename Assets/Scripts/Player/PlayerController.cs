@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
     private int interval = 2; // health / interval = # of health bars
     private float curHealth;
 
+    private void death() 
+    {
+
+    }
+
     void Start() { curHealth = health; updateInterface(); } //StartCoroutine(TestHealthInterface()); }
 
     private IEnumerator TestHealthInterface(){
@@ -66,6 +71,7 @@ public class PlayerController : MonoBehaviour
         curHealth -= amt;
         StartCoroutine(hurtOverlay(amt));
         updateInterface();
+        if(curHealth <= 0) {death();}
         return curHealth;
     }
 

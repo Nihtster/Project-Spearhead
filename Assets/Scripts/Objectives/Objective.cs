@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Objective : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private string Name = "Base";
+    [SerializeField] private char DistantName = 'B';
+    [SerializeField] private float Health = 100;
+    private float curHealth;
+    private bool alerted;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void Start() {}
+
+    public float dmg(float amt) {
+        curHealth -= amt;
+        return curHealth;
     }
 }
