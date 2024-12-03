@@ -12,20 +12,21 @@ public class PlayerController : MonoBehaviour
     private int interval = 2; // health / interval = # of health bars
     private float curHealth;
 
-    void Start() { curHealth = health; updateInterface(); StartCoroutine(TestHealthInterface()); }
+    void Start() { curHealth = health; updateInterface(); //StartCoroutine(TestHealthInterface()); }
 
     private IEnumerator TestHealthInterface(){
-        // yield return new WaitForSeconds(3);
-        // dmg(10);
-        // yield return new WaitForSeconds(6);
-        // dmg(health / 4);
-        // for (int i = 0; i < 20; i++)
-        // {
-        //     curHealth -= 5;
-        //     updateInterface();
-        //     yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
+        dmg(10);
+        yield return new WaitForSeconds(6);
+        dmg(health / 4);
+        yield return new WaitForSeconds(6);
+        for (int i = 0; i < 20; i++)
+        {
+            curHealth -= 5;
+            updateInterface();
+            yield return new WaitForSeconds(2);
 
-        // }
+        }
     }
 
     private void updateInterface()
