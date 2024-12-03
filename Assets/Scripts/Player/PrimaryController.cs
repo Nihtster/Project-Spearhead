@@ -17,17 +17,25 @@ public class PrimaryController : MonoBehaviour
     private int mag;
     private int initialRounds;
 
-    private bool firing
-    private bool reloading
+    private bool firing;
+    private bool reloading;
 
-    private void reload() {
+    private void reload()
+    {
         reloading = true;
         // TO-DO: reload sfx here
         int diff = magSize - mag; // how much we are reloading
         int possible = roundsLeft < diff ? roundsLeft : diff; // how much we can reload from ammo
-        mag = possible;
+        mag += possible;
+        roundsLeft -= possible;
         // TO-DO: update player hud here
+        StartCoroutine(ReloadCoroutine());
+    }
+
+    private IEnumerator ReloadCoroutine() 
+    {
         yield return new WaitForSeconds(reloadTime);
+        reloading = false;
     }
 
     void Start()
@@ -38,31 +46,37 @@ public class PrimaryController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) 
+        {
             fire();
+        }
     }
     
-    private void fire() {
-        if (firing || reloading) { return; }
+    private void fire()
+    {
+        if (firing || reloading || mag <= 0) { return; } // Check if there's ammo
         // TO-DO: fire sfx here
         firing = true;
-        StartCoroutine(fire)
+        StartCoroutine(fireRoutine());
     }
 
-    private IEnumerator fireRoutine() {
-        GameObject firedProjectile = Instantiate(projectile, primaryWeapon.position, Quaternion.identity);
+    private IEnumerator fireRoutine()
+    {
+        GameObject firedProjectile = Instantiate(projectile, primaryWeapon.transform.position, Quaternion.identity);
         Vector3 projectileDirection = cam.transform.forward;
         // TO-DO: integrate with projectile script???
         --mag;
-        if(mag <= 0) { reload(); }
+        if (mag <= 0) { reload(); }
         yield return new WaitForSeconds(fireRate);
+        firing = false; // End firing
     }
 
     public int getRoundsLeft() { return roundsLeft; }
     public int getMagSize() { return magSize; }
     public int getMag() { return mag; }
 
-    public void resupply() {
+    public void resupply()
+    {
         roundsLeft = initialRounds;
         mag = magSize;
     }
