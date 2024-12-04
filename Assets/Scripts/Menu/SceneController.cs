@@ -8,7 +8,10 @@ using TMPro;
 public class SceneController : MonoBehaviour {
     public static SceneController singleton;
     public Image loadScreen;
+    [SerializeField] public TextMeshProUGUI loadLabel;
     public TextMeshProUGUI text;
+    private bool loaded = false;
+    
 
     private void Awake() {
         //Set up the singleton reference
@@ -42,7 +45,21 @@ public class SceneController : MonoBehaviour {
         loadScreen.gameObject.SetActive(false);
     }
 
+    private IEnumerator LoadingLabelAnimation()
+    {
+        int idx = 0;
+        while(!loaded)
+        {
+            loadLabel.text = idx <= 0 ? "Loading game" : loadLabel.text + ".";
+            ++idx;
+            idx %= 4;
+            yield return new WaitForSeconds(0.5f);
+        }
+        loadLabel.text = "Done";
+    }
+
     public void LoadScene(string sceneName) {
+        StartCoroutine(LoadingLabelAnimation());
         StartCoroutine(LoadSceneEnum(sceneName));
     }
 

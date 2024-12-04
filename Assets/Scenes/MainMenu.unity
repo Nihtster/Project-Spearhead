@@ -13978,6 +13978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadScreen: {fileID: 1739201254}
+  loadLabel: {fileID: 1015357439}
   text: {fileID: 1620302221}
 --- !u!114 &1854658180
 MonoBehaviour:
