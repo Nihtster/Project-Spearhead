@@ -6,7 +6,6 @@ public class Spawn_manager : MonoBehaviour
 {
 
     [SerializeField] GameObject[] spawnerObject;
-    [SerializeField] List<AI_Spawner> spawners;
 
     private int activeUnits = 0;
     private int unitsPerSpawner = 2;
@@ -17,7 +16,6 @@ public class Spawn_manager : MonoBehaviour
     {
         compileSpawners();
         StartCoroutine(waveSpawnRoutine());
-        spawners = new List<AI_Spawner> ();
     }
 
     // Update is called once per frame
@@ -30,10 +28,6 @@ public class Spawn_manager : MonoBehaviour
             Debug.LogError("No spawn objects assigned.");
             return;
         }
-        foreach (GameObject spawner in spawnerObject)
-        {
-            spawners.Add(spawner.GetComponent<AI_Spawner>());
-        }
     }
     private void spawnWave(int numUnit,float oPrio,float pPrio)
     {
@@ -42,8 +36,6 @@ public class Spawn_manager : MonoBehaviour
             Debug.Log("reaches spawn call");
             spawner.GetComponent<AI_Spawner>().SpawnAI(numUnit, oPrio, pPrio);
         }
-        Debug.Log($"Wave spawned: {numUnit * spawners.Count} units.");
-
     }
     public IEnumerator waveSpawnRoutine()
     {
