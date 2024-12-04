@@ -12,15 +12,15 @@ public class SceneController : MonoBehaviour {
 
     private void Awake() {
         //Set up the singleton reference
+        StartCoroutine(FadeToClear());
 		if(singleton != null) {
 			Debug.LogWarning("There are two SceneControllers! Please ensure there's only one SceneController in the scene at a time.");
-			Destroy(this);
+			//Destroy(this);
 			return;
 		} else {
 			DontDestroyOnLoad(this);
 			singleton = this;
 		}
-        StartCoroutine(FadeToClear());
     }
 
     public IEnumerator FadeToBlack() {
