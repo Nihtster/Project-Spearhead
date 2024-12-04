@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 public class AmaiseAI : MonoBehaviour
 {
+    [SerializeField] private AudioSource audioSource; // AudioSource to play sounds
+    [SerializeField] private AudioClip deathSFX; // Audio for death
     public AmaiseStats stats; // Reference to the ScriptableObject
     private GameObject self;    // for use in self referencing
     [SerializeField] private NavMeshAgent agent;// navmesh
@@ -266,7 +268,9 @@ public class AmaiseAI : MonoBehaviour
         currHealth -= damage;
         if (currHealth <= 0)
         {
+            audioSource.PlayOneShot(deathSFX);
             agent.enabled = false;
+            Destroy(this);
         }
         else
         {

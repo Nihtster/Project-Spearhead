@@ -17,11 +17,12 @@ public class SecondaryController : MonoBehaviour
     [SerializeField] private AudioSource audioSourceL; // AudioSource to play sounds
     [SerializeField] private AudioSource audioSourceR; // AudioSource to play sounds
 
+    [SerializeField] private int DMG = 15;
     [SerializeField] private int roundsLeft = 120;
     [SerializeField] private int magSize = 12;
     [SerializeField] private float fireRate = 0.4f; // cooldown between shots (in seconds)
     [SerializeField] private float reloadTime = 3f; // in seconds
-    [SerializeField] private float projectileSpeed = 100f; // Projectile speed
+    // [SerializeField] private float projectileSpeed = 100f; // Projectile speed
 
     private int mag;
     private int initialRounds;
@@ -104,13 +105,16 @@ public class SecondaryController : MonoBehaviour
         Vector3 calcFwd = usedLeft ? secondaryWeaponL.transform.forward : secondaryWeaponR.transform.forward;
         // Raycast from the position of the secondaryWeapon
         Ray ray = new Ray(calcPos, calcFwd);
-        RaycastHit hit;
-
-        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red, 1f); // Draw the ray for 1 second, with a red color and length of 100 units
+        RaycastHit[] hits = Physics.RaycastAll(ray, 10000f);
 
         // Cast the ray forward and check if it hits anything
-        if (Physics.Raycast(ray, out hit))
+        foreach (RaycastHit hit in hits)
         {
+            GameObject obj = hit.collider.gameObject;
+            if(obj.name == "amaise_prefab_ai") {
+                AmaiseAI enemy = obj.GetComponent<AmaiseAI>();
+                enemy.dmg(DMG);
+            }
             // If the ray hits something, instantiate the visual effect (impact)
             Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
 
