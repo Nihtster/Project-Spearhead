@@ -376,7 +376,7 @@ MonoBehaviour:
   bg_hp_indicator: {fileID: 30790312}
   playerCam: {fileID: 453117561}
   Name: Power Station
-  Health: 100
+  Health: 1000
   poweredObjectives:
   - {fileID: 1463055147}
 --- !u!1001 &38752280
@@ -6287,7 +6287,7 @@ MonoBehaviour:
   audioSourceR: {fileID: 1476747426}
   roundsLeft: 120
   magSize: 12
-  fireRate: 0.1
+  fireRate: 0.5
   reloadTime: 3
   projectileSpeed: 100
 --- !u!114 &234104235
@@ -42305,7 +42305,7 @@ MonoBehaviour:
   bg_hp_indicator: {fileID: 1463055145}
   playerCam: {fileID: 453117561}
   Name: Resupply / Repair
-  Health: 100
+  Health: 1000
   resupplySFX: {fileID: 8300000, guid: f2cc76c741205da4db79d263f2e10833, type: 3}
   radius: 500
   cooldown: 10
