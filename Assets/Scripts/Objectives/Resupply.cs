@@ -15,11 +15,6 @@ public class Resupply : Objective
         StartCoroutine(resupplyCheck());
     }
 
-    void Update()
-    {
-        base.Update();
-    }
-
     private IEnumerator resupplyCheck()
     {
         while(!disabled) {

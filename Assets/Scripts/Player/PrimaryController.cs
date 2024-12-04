@@ -105,7 +105,7 @@ public class PrimaryController : MonoBehaviour
         yield return new WaitForSeconds(fireDelay);
         // Raycast from the position of the primaryWeapon
         Ray ray = new Ray(primaryWeapon.transform.position, primaryWeapon.transform.forward);
-        RaycastHit[] hits = Physics.RaycastAll(ray, 10000f);
+        RaycastHit[] hits = Physics.RaycastAll(ray, 1000f);
 
         Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red, 1f); // Draw the ray for 1 second, with a red color and length of 100 units
         bool impactedNonEnemy = false;

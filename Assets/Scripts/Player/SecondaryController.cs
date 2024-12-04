@@ -105,7 +105,7 @@ public class SecondaryController : MonoBehaviour
         Vector3 calcFwd = usedLeft ? secondaryWeaponL.transform.forward : secondaryWeaponR.transform.forward;
         // Raycast from the position of the secondaryWeapon
         Ray ray = new Ray(calcPos, calcFwd);
-        RaycastHit[] hits = Physics.RaycastAll(ray, 10000f);
+        RaycastHit[] hits = Physics.RaycastAll(ray, 250f);
         bool impactedNonEnemy = false;
         // Cast the ray forward and check if it hits anything
         foreach (RaycastHit hit in hits)
