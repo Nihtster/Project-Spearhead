@@ -23,7 +23,7 @@ public class Resupply : Objective
             Collider[] possiblePlayers = Physics.OverlapSphere(transform.position, radius);
             foreach (Collider collider in possiblePlayers)
             {
-                if (collider.CompareTag("Player"))
+                if (collider.CompareTag("Player_model"))
                 {
                     GameObject plyObj = collider.transform.parent.parent.gameObject;
                     audioSource.PlayOneShot(resupplySFX);

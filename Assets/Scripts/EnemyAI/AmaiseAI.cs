@@ -203,7 +203,7 @@ public class AmaiseAI : MonoBehaviour
     }
     public void handleDeath()
     {
-        audioSource?.PlayOneShot(deathSFX);
+        audioSource.PlayOneShot(deathSFX);
         target = null;
         detectionRange = 0f;
         Destroy(gameObject);
