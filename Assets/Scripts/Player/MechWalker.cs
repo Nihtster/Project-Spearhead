@@ -110,7 +110,7 @@ public class MechWalker : MonoBehaviour
             legTargets[legIndex].position = interpolatedPosition;
 
             elapsed += Time.deltaTime;
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
         // Snap the leg to the target position at the end of the step
