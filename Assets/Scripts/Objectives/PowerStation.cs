@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PowerStation : Objective
 {
-    [SerializeField] private Objective[] linked;
+    [SerializeField] private Objective[] poweredObjectives;
 
     protected void Death()
     {
         base.Death();
-        foreach (Objective obj in linked)
+        foreach (Objective obj in poweredObjectives)
         {
             obj.Disable();
         }
