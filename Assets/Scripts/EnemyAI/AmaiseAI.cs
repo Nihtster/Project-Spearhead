@@ -11,23 +11,23 @@ public class AmaiseAI : MonoBehaviour
     [SerializeField] private AudioClip deathSFX;            // Audio for death
     [SerializeField] private AmaiseStats stats;                               // Reference to the ScriptableObject
     [SerializeField] private NavMeshAgent agent;            // navmesh
+    [SerializeField] private GameObject playerMain;              // player main object
     [SerializeField] private Transform player;              // player transform
-    [SerializeField] private Transform objective;           // objective transform
+    [SerializeField] private GameObject objective;           // objective transform
     [SerializeField] public GameObject target;
 
     [SerializeField] private Vector3 lastSetDestination;
     [SerializeField] public float currHealth;
     [SerializeField] private float lastAttackTime;
     [SerializeField] private float attackRange;
-    [SerializeField] private float attackDamage;
     [SerializeField] private float detectionRange;
     [SerializeField] public LayerMask obstructionMask;                       // for use in raycasting
-    [SerializeField] public float playerPriority = .6f;                      // player prio
-    [SerializeField] public float objectivePriority = .4f;                   // objective prio
-    [SerializeField] public bool objectiveDestroyed = false;                 // helps with logic if all objectives are destroyed
+    [SerializeField] public float playerPriority = .5f;                      // player prio
+    [SerializeField] public float objectivePriority = .5f;                   // objective prio
     [SerializeField] public bool firing;
     [SerializeField] public bool canSeePlayer;
-
+    private float destinationUpdateInterval = 0.5f; // Update every 0.5 seconds
+    private float lastDestinationUpdateTime;
 
     void Start()
     {
@@ -48,113 +48,107 @@ public class AmaiseAI : MonoBehaviour
         {
             agent.speed = stats.moveSpeed;
         }
-                                                            // Find player and objective
-        player = GameObject.FindWithTag("Player")?.transform;
-        objective = GameObject.FindWithTag("Objective")?.transform;
-        target = player.gameObject;
+        playerMain = GameObject.FindWithTag("Player");              // player transform
+        player = playerMain.GetComponent<PlayerController>().modelTransform;
+        objective = GameObject.FindWithTag("Objective");           // objective transform
                                                             // initial path set and starting path update loop
         UpdateNavMeshDestination();
     }
 
     void Update()
     {
-        player = GameObject.FindWithTag("Player")?.transform;
-                                                             // adjusting priorities(normalizing)
-        if (objectiveDestroyed)  AdjustPrioritiesForObjectiveDestruction(); 
-        else AdjustPriorities();
-
+        
         if (currHealth <= 0 || agent == null) return;
-            
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        float distanceToObjective = Vector3.Distance(transform.position, objective.position);
+        
+        CanSeePlayer();
+        
+        if (Time.time >= lastDestinationUpdateTime + destinationUpdateInterval)
+        {
+            UpdateNavMeshDestination();
+            lastDestinationUpdateTime = Time.time;
+        }
 
-        UpdateNavMeshDestination();
-                                                            // Perform actions based on visibility and distance
-        NormalizePriorities();
-                                                            // Perform the attack
-        if (distanceToPlayer < attackRange) Attack(player.gameObject);
-        else if (distanceToObjective < attackRange) Attack(objective.gameObject);
+
+        // Perform actions based on visibility and distance
+        float distanceToPlayer = player != null ? Vector3.Distance(transform.position, player.transform.position) : Mathf.Infinity;
+        if (canSeePlayer && distanceToPlayer <= attackRange)
+        {
+            Attack(playerMain.gameObject);
+        }
+        else if (objective != null && Vector3.Distance(transform.position, objective.transform.position) <= attackRange)
+        {
+            Attack(objective.gameObject);
+        }
     }
 //******************************************************************************************************************************************
     private bool CanSeePlayer()
     {
         if (player == null) return false;
-        
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        
-                                                            //debug log for distance to player
-        //Debug.Log($"Distance from AI to Player: {distanceToPlayer}");
 
-        if (distanceToPlayer <= detectionRange)
+        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        Debug.DrawRay(transform.position, directionToPlayer * detectionRange, Color.red);
+
+        if(distanceToPlayer <= detectionRange && !Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, obstructionMask))
         {
-            if (!Physics.Raycast(transform.position, directionToPlayer, detectionRange, obstructionMask))
+            if (!canSeePlayer) // Visibility changed
             {
                 canSeePlayer = true;
-                return true; // Player is visible
-                
+                Debug.Log("Player is now visible.");
             }
+            playerPriority += .05f;
+            return true;
         }
-        canSeePlayer = false;
+
+        if (canSeePlayer) // Visibility changed
+        {
+            canSeePlayer = false;
+            Debug.Log("Player is no longer visible.");
+        }
         return false;
     }
 //******************************************************************************************************************************************
-
-
-
-
                                                             // sets destination, changes route if near player.
     private void UpdateNavMeshDestination()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        if (agent.isStopped) return;
-        if(CanSeePlayer() || playerPriority >= objectivePriority)
+        float distanceToPlayer = player != null ? Vector3.Distance(transform.position, player.transform.position) : Mathf.Infinity;
+        if (distanceToPlayer <= detectionRange || canSeePlayer)
         { 
             MoveToPlayer();
         }
-        else
+        else if(objective !=null && !canSeePlayer)
         {
             MoveToObjective();
         }
+
     }
     private void MoveToPlayer()
     {
-        if (player != null && agent.isOnNavMesh)
-        {
-            agent.SetDestination(player.position);
-
-        }
+        
+            agent.isStopped = false;
+            Debug.Log(agent.SetDestination(player.transform.position)+"Moving toward player.");       
     }
     private void MoveToObjective()
     {
-        if (firing) return;
-        if (objective == null) objective = GameObject.FindWithTag("Objective").transform; // if original objective is destroyed
-            
-        if (objective != null && agent.isOnNavMesh)
-        {
-            agent.SetDestination(objective.position);
-        }
-        else
-        {
-            Debug.Log("Objective destroyed. Switching priorities.");
-            AdjustPrioritiesForObjectiveDestruction();
-        }
+        
+            agent.isStopped = false;
+            Debug.Log(agent.SetDestination(objective.transform.position)+"Moving toward objective."); 
     }
 
 //******************************************************************************************************************************************
     private void Attack(GameObject t)
     {
-        
-                                                               // if already firing, will not fire again
+        if (Vector3.Distance(transform.position, player.position) > attackRange) return;
+        // if already firing, will not fire again
         if (firing || t == null) 
         {
             return;
         }
-        target = t;
-        Debug.Log(target.tag);
+        
+        Debug.Log(t.tag);
         agent.isStopped = true;                                 // Stop movement while attacking
         firing = true;
-        StartCoroutine(attackCoroutine(target, (float)stats.damage));  // Perform attack logic (e.g., deal damage to player)
+        StartCoroutine(attackCoroutine(t, (float)stats.damage));  // Perform attack logic (e.g., deal damage to player)
     }
     public IEnumerator attackCoroutine(GameObject t, float damage)
     {
@@ -171,35 +165,21 @@ public class AmaiseAI : MonoBehaviour
             t.GetComponent<PlayerController>().dmg(damage);
             Debug.Log("Attacking Player - successful");
         }
-        yield return new WaitForSeconds(stats.attackCooldown/12);
-
-
+        yield return new WaitForSeconds(stats.attackCooldown/2);
+        yield return ResumeMovementAfterAttack(2);
     }
     private IEnumerator ResumeMovementAfterAttack(float delay) // will delay resumption of movement
-    {
-        yield return new WaitForSeconds(delay/12);
-        if (agent != null)
-        {
-            agent.isStopped = false;                        // Resume movement after the attack delay
-            firing = false;
-        }
+    { 
         Debug.Log("Resuming movement.");
+        agent.isStopped = false;                        // Resume movement after the attack delay
+        firing = false;
+        yield return new WaitForSeconds(delay);
     }
 
 //******************************************************************************************************************************************
-   
-    private void AdjustPrioritiesForObjectiveDestruction()
-    {
-        Debug.Log("Objective destroyed. Prioritizing player.");
-        objectivePriority = 0.0f;
-        playerPriority = 1.0f;
-        NormalizePriorities();
-    }
 
     private void AdjustPriorities()
     {                                                                         
-        if (!CanSeePlayer())objectivePriority += 0.1f;
-        else playerPriority += .1f;
         NormalizePriorities();
     }
 

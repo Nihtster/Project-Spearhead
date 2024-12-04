@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f93e6ede5083540ace42e178883a08, type: 3}
   m_Name: standard_amaise
   m_EditorClassIdentifier: 
-  moveSpeed: 16
+  moveSpeed: 12
   damage: 10
-  health: 25
+  health: 20
   attackCooldown: 5
   attackRange: 75
-  detectionRange: 150
+  detectionRange: 175
   playerPriority: 0.6
   objectivePriority: 0.4

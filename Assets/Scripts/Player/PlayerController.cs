@@ -6,6 +6,7 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] public Transform modelTransform;
     [SerializeField] private TMP_Text health_interface;
     [SerializeField] private Image hurt_overlay;
     [SerializeField] private float health = 100f;
