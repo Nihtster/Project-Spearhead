@@ -25,3 +25,87 @@ MonoBehaviour:
     bypassEffects: 0
     audioMixerGroup: {fileID: 24300002, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
     playOnAwake: 1
+  - name: button_hover
+    clips:
+    - {fileID: 8300000, guid: d4992bd71b8de56fdbd3d10bfcc8da1b, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
+  - name: button_select
+    clips:
+    - {fileID: 8300000, guid: ca54b852b0b37dad7bf50d79135650c7, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
+  - name: button_deny
+    clips:
+    - {fileID: 8300000, guid: a3858ff83613ceae9b630b7c7ee26c03, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
+  - name: notification
+    clips:
+    - {fileID: 8300000, guid: 6431c3850a3d7a85c99fa010646cc1cd, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
+  - name: panel_close
+    clips:
+    - {fileID: 8300000, guid: 0a85204635dbe520d9468c45476bcde6, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
+  - name: panel_open
+    clips:
+    - {fileID: 8300000, guid: dc67902067f3c0892aa91def37243703, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
+  - name: panel_confirm
+    clips:
+    - {fileID: 8300000, guid: 7542d681c26be2fe89dc3d8f06ba7337, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0.1
+    spacialBlend: 1
+    loop: 0
+    audioRolloffMode: 1
+    bypassEffects: 0
+    audioMixerGroup: {fileID: 7552843571180334444, guid: c1fe2938641bde11696865c2e6d19011, type: 2}
+    playOnAwake: 1
