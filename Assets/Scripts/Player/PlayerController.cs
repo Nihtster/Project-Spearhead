@@ -7,32 +7,33 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] public Transform modelTransform;
+    [SerializeField] private PrimaryController primaryWeapon;
+    [SerializeField] private SecondaryController secondaryWeapon;
+    [SerializeField] private PlayerMovement movementController;
+    [SerializeField] private Canvas loss_interface;
     [SerializeField] private TMP_Text health_interface;
     [SerializeField] private Image hurt_overlay;
     [SerializeField] private float health = 100f;
+    private float curHealth;
     private int interval = 2; // health / interval = # of health bars
-    [SerializeField] private float curHealth;
+    private bool alive = true;
 
-    private void death() 
+    public void Death()
     {
-        // TO-DO: game end scenario here
+        alive = false;
+        primaryWeapon.Disable();
+        secondaryWeapon.Disable();
+        movementController.Disable();
+        loss_interface.gameObject.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
-    void Start() { curHealth = health; updateInterface(); } //StartCoroutine(TestHealthInterface()); }
+    void Start() { curHealth = health; updateInterface(); StartCoroutine(TestHealthInterface()); }
 
     private IEnumerator TestHealthInterface(){
         yield return new WaitForSeconds(3);
-        dmg(10);
-        yield return new WaitForSeconds(6);
-        dmg(health / 4);
-        yield return new WaitForSeconds(6);
-        for (int i = 0; i < 20; i++)
-        {
-            curHealth -= 5;
-            updateInterface();
-            yield return new WaitForSeconds(2);
-
-        }
+        dmg(100);
     }
 
     private void updateInterface()
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
         curHealth -= amt;
         StartCoroutine(hurtOverlay(amt));
         updateInterface();
-        if(curHealth <= 0) {death();}
+        if(curHealth <= 0) {Death();}
         return curHealth;
     }
 
@@ -87,5 +88,10 @@ public class PlayerController : MonoBehaviour
     {
         curHealth = health;
         updateInterface();
+    }
+
+    public bool isAlive()
+    {
+        return alive;
     }
 }

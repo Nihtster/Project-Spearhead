@@ -24,6 +24,7 @@ public class SecondaryController : MonoBehaviour
     [SerializeField] private float reloadTime = 3f; // in seconds
     // [SerializeField] private float projectileSpeed = 100f; // Projectile speed
 
+    private bool disabled;
     private int mag;
     private int initialRounds;
 
@@ -80,6 +81,10 @@ public class SecondaryController : MonoBehaviour
 
     void Update()
     {
+        if(disabled) 
+        {
+            return;
+        }
         if (Input.GetMouseButton(1))
         {
             fire();
@@ -153,5 +158,11 @@ public class SecondaryController : MonoBehaviour
         roundsLeft = initialRounds;
         mag = magSize;
         updateText();
+    }
+
+    public bool Disable()
+    {
+        disabled = true;
+        return disabled;
     }
 }

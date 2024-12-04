@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PowerStation : Objective
 {
+    [SerializeField] private PlayerController Player;
     [SerializeField] private Objective[] poweredObjectives;
 
     protected void Death()
@@ -13,6 +14,6 @@ public class PowerStation : Objective
         {
             obj.Disable();
         }
-        // TO-DO: game end here
+        Player.Death();
     }
 }

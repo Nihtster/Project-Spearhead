@@ -23,6 +23,7 @@ public class PrimaryController : MonoBehaviour
     // [SerializeField] private float projectileSpeed = 20f; // Projectile speed
     [SerializeField] private float fireDelay = 1f; // Delay before shot
 
+    private bool disabled;
     private int mag;
     private int initialRounds;
 
@@ -82,6 +83,10 @@ public class PrimaryController : MonoBehaviour
 
     void Update()
     {
+        if(disabled) 
+        {
+            return;
+        }
         if (Input.GetMouseButton(0))
         {
             fire();
@@ -147,5 +152,11 @@ public class PrimaryController : MonoBehaviour
         roundsLeft = initialRounds;
         mag = magSize;
         updateText();
+    }
+
+    public bool Disable()
+    {
+        disabled = true;
+        return disabled;
     }
 }

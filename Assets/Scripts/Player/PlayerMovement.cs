@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;           // Gravity force
     public float jumpHeight = 50f;           // Height for the jump
     private float velocityY;                 // Store vertical velocity (jump/gravity)
+    private bool disabled = false;
 
     void Start()
     {
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if(disabled) { return; }
         // Handle jumping and gravity
         if (playerController.isGrounded)
         {
@@ -74,5 +76,11 @@ public class PlayerMovement : MonoBehaviour
             transform.position = startPosition;
             transform.rotation = Quaternion.identity;
         }
+    }
+
+    public bool Disable()
+    {
+        disabled = true;
+        return disabled;
     }
 }
