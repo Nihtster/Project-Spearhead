@@ -5,7 +5,7 @@ using UnityEngine;
 public class Spawn_manager : MonoBehaviour
 {
 
-    [SerializeField] GameObject[] spawnObject;
+    [SerializeField] GameObject[] spawnerObject;
     [SerializeField] List<AI_Spawner> spawners;
 
     private int activeUnits = 0;
@@ -25,19 +25,19 @@ public class Spawn_manager : MonoBehaviour
 //******************************************************************************************************************************************
     private void compileSpawners()
     {
-        if (spawnObject.Length == 0)
+        if (spawnerObject.Length == 0)
         {
             Debug.LogError("No spawn objects assigned.");
             return;
         }
-        foreach (GameObject spawner in spawnObject)
+        foreach (GameObject spawner in spawnerObject)
         {
             spawners.Add(spawner.GetComponent<AI_Spawner>());
         }
     }
     private void spawnWave(int numUnit,float oPrio,float pPrio)
     {
-        foreach (GameObject spawner in spawnObject)
+        foreach (GameObject spawner in spawnerObject)
         {
             Debug.Log("reaches spawn call");
             spawner.GetComponent<AI_Spawner>().SpawnAI(numUnit, oPrio, pPrio);
