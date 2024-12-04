@@ -8,14 +8,14 @@ public class AI_attack_handler : MonoBehaviour
 
     public float Attack(GameObject target, float damage)
     {
-        Debug.Log("Attacking!");
-
         if(target.CompareTag("Objective"))  //attacking objective
         {
+            Debug.Log("Attacking Player!");
             target.GetComponent<Objective>().dmg(damage);
             return damage;
         }else if (target.CompareTag("Player"))
         {
+            Debug.Log("Attacking Objective!");
             target.GetComponent<PlayerController>().dmg(damage);
             return damage;
         }

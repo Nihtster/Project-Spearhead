@@ -37,21 +37,19 @@ public class AI_Spawner : MonoBehaviour
                     damageObjective += tempAI.damageObjective;
                     damagePlayer += tempAI.damagePlayer;
                     unitsSpawned.Remove(go);
-                    despawnCoroutine(go);
+                    HandleDeath(go);
                 }
             }
         }
     }
 //******************************************************************************************************************************************
-    private IEnumerator despawnCoroutine(GameObject go)
+    private void HandleDeath(GameObject go)
     {
-        yield return new WaitForSeconds(2);
-
         if (go != null)
         {
-            Destroy(go);
+            go.GetComponent<AmaiseAI>().handleDeath();
         }
-        Debug.Log("units Despawned");
+        Debug.Log("unit Despawned");
     }
 
     public void SpawnAI(int count,float oPrio,float pPrio)
@@ -65,7 +63,6 @@ public class AI_Spawner : MonoBehaviour
             {
                 GameObject temp = null;
                 temp = (GameObject)Instantiate(aiPrefab, hit.position, Quaternion.identity); //instantiate unit
-                if (temp != null) { Debug.Log("temp assigned"); }
                 AmaiseAI tempAI = temp.GetComponent<AmaiseAI>();
                 unitsSpawned.Add(temp);     //add unit to internal list
 
