@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    void Start() { curHealth = health; updateInterface(); StartCoroutine(TestHealthInterface()); }
+    void Start() { curHealth = health; updateInterface(); }//StartCoroutine(TestHealthInterface()); }
 
     private IEnumerator TestHealthInterface(){
         yield return new WaitForSeconds(3);
