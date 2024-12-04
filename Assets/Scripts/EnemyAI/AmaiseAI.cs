@@ -100,6 +100,9 @@ public class AmaiseAI : MonoBehaviour
     }
 //******************************************************************************************************************************************
 
+
+
+
                                                             // sets destination, changes route if near player.
     private void UpdateNavMeshDestination()
     {

@@ -54,9 +54,9 @@ public class AI_Spawner : MonoBehaviour
         Bounds bounds = spawnArea.bounds;
 
         // Generate a random position within the bounds
-        float x = Random.Range(bounds.min.x + 13, bounds.max.x+13);
+        float x = Random.Range(bounds.min.x, bounds.max.x);
         float y = bounds.center.y; // Use the collider's center height
-        float z = Random.Range(bounds.min.z+13, bounds.max.z + 13);
+        float z = Random.Range(bounds.min.z, bounds.max.z);
 
         return new Vector3(x, y, z);
     }
