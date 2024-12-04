@@ -13,5 +13,6 @@ public class PowerStation : Objective
         {
             obj.Disable();
         }
+        // TO-DO: game end here
     }
 }

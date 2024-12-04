@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private void death() 
     {
-
+        // TO-DO: game end scenario here
     }
 
     void Start() { curHealth = health; updateInterface(); } //StartCoroutine(TestHealthInterface()); }

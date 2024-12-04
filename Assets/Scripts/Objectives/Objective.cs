@@ -6,15 +6,15 @@ using TMPro;
 
 public class Objective : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource; // AudioSource to play sounds
+    [SerializeField] protected AudioSource audioSource; // AudioSource to play sounds
     [SerializeField] private AudioClip dmgAlert;
     [SerializeField] private TMP_Text text_interface;
     [SerializeField] private Image bg_hp_indicator;
     [SerializeField] private Camera playerCam;
     [SerializeField] private string Name = "Base";
     [SerializeField] private float Health = 100;
-    private float curHealth;
-    private bool alerted = false;
+    protected float curHealth;
+    protected bool alerted = false;
     protected bool destroyed = false;
     protected bool disabled = false;
 
