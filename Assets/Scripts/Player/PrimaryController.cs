@@ -8,7 +8,7 @@ public class PrimaryController : MonoBehaviour
     [SerializeField] private TMP_Text statusInterface;
     [SerializeField] private TMP_Text ammoInterface;
     [SerializeField] private GameObject primaryWeapon;
-    // [SerializeField] private GameObject fx;
+    [SerializeField] private GameObject fx;
     [SerializeField] private Camera cam;
     [SerializeField] private AudioClip reloadSFX;
     [SerializeField] private AudioClip fireSFX; // Audio for firing
@@ -108,20 +108,23 @@ public class PrimaryController : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(ray, 10000f);
 
         Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red, 1f); // Draw the ray for 1 second, with a red color and length of 100 units
+        bool impactedNonEnemy = false;
         // Cast the ray forward and check if it hits anything
         foreach (RaycastHit hit in hits)
         {
-      
             GameObject obj = hit.collider.gameObject;
             if(obj.name.Contains("amaise_prefab_ai")) {
+                PlaySound(impactSFX);
                 AmaiseAI enemy = obj.GetComponent<AmaiseAI>();
                 enemy.dmg(DMG);
+            } else if(!impactedNonEnemy)
+            {
+                // Play the impact sound
+                PlaySound(impactSFX);
+                impactedNonEnemy = true;
+                // If the ray hits something, instantiate the visual effect (impact)
+                Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
             }
-            // If the ray hits something, instantiate the visual effect (impact)
-            // Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
-
-            // Play the impact sound
-            PlaySound(impactSFX);
         }
 
         --mag;

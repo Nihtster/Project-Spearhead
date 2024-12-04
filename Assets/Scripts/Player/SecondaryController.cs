@@ -9,7 +9,7 @@ public class SecondaryController : MonoBehaviour
     [SerializeField] private TMP_Text ammoInterface;
     [SerializeField] private GameObject secondaryWeaponL;
     [SerializeField] private GameObject secondaryWeaponR;
-    // [SerializeField] private GameObject fx;
+    [SerializeField] private GameObject fx;
     [SerializeField] private Camera cam;
     [SerializeField] private AudioClip reloadSFX;
     [SerializeField] private AudioClip fireSFX; // Audio for firing
@@ -106,20 +106,23 @@ public class SecondaryController : MonoBehaviour
         // Raycast from the position of the secondaryWeapon
         Ray ray = new Ray(calcPos, calcFwd);
         RaycastHit[] hits = Physics.RaycastAll(ray, 10000f);
-
+        bool impactedNonEnemy = false;
         // Cast the ray forward and check if it hits anything
         foreach (RaycastHit hit in hits)
         {
             GameObject obj = hit.collider.gameObject;
             if(obj.name.Contains("amaise_prefab_ai")) {
+                PlaySound(impactSFX);
                 AmaiseAI enemy = obj.GetComponent<AmaiseAI>();
                 enemy.dmg(DMG);
+            } else if(!impactedNonEnemy)
+            {
+                // Play the impact sound
+                PlaySound(impactSFX);
+                impactedNonEnemy = true;
+                // If the ray hits something, instantiate the visual effect (impact)
+                Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
             }
-            // If the ray hits something, instantiate the visual effect (impact)
-            // Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
-
-            // Play the impact sound
-            PlaySound(impactSFX);
         }
 
         --mag;
