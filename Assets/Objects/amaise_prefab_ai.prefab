@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1275579947591772108}
   - component: {fileID: 7602145435154316895}
   - component: {fileID: 6786673030295140583}
+  - component: {fileID: 1746006878639978795}
+  - component: {fileID: 324060288698589848}
   m_Layer: 0
   m_Name: amaise_prefab_ai
   m_TagString: Untagged
@@ -28,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7388601009515025166}
   m_Father: {fileID: 0}
@@ -46,14 +48,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83d7d595a6ffc1749991eb211a5076fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 313ad619ccdcffa4480944482e4a2b53, type: 2}
+  stats: {fileID: 11400000, guid: 1fb47782f5c6a2941a956e66a1d7c6d6, type: 2}
   agent: {fileID: 0}
   player: {fileID: 0}
   objective: {fileID: 0}
+  target: {fileID: 0}
+  currHealth: 0
   detectionRange: 500
   obstructionMask:
     serializedVersion: 2
     m_Bits: 128
+  canSeePlayer: 0
+  damageObjective: 0
+  damagePlayer: 0
+  playerPriority: 0
+  objectivePriority: 0
+  objectiveDestroyed: 0
 --- !u!195 &6786673030295140583
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -63,7 +73,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6800924122365571022}
   m_Enabled: 1
   m_AgentTypeID: -334000983
-  m_Radius: 26.3
+  m_Radius: 25
   m_Speed: 100
   m_Acceleration: 15
   avoidancePriority: 50
@@ -72,10 +82,34 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 15
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1746006878639978795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6800924122365571022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb8887139bdab84f95b2c23ec2f0152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &324060288698589848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6800924122365571022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41b4c3ada5bdd224bb48ed351f66d94b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6990479449842070757
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -153,35 +187,10 @@ PrefabInstance:
     - {fileID: 65702495048144492, guid: 796c4a408178b5442b7c9ddb2964ab92, type: 3}
     - {fileID: -8700617353114198275, guid: 796c4a408178b5442b7c9ddb2964ab92, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 796c4a408178b5442b7c9ddb2964ab92, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3772915142188800249}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 796c4a408178b5442b7c9ddb2964ab92, type: 3}
 --- !u!4 &7388601009515025166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 796c4a408178b5442b7c9ddb2964ab92, type: 3}
   m_PrefabInstance: {fileID: 6990479449842070757}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7908960673081330100 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 796c4a408178b5442b7c9ddb2964ab92, type: 3}
-  m_PrefabInstance: {fileID: 6990479449842070757}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3772915142188800249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7908960673081330100}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f76a8efa099346a4ca11278c1d58714e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRange: 50
-  detectionRange: 50
-  obstructionMask:
-    serializedVersion: 2
-    m_Bits: 0

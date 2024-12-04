@@ -6,36 +6,74 @@ using UnityEngine.AI;
 public class AI_Spawner : MonoBehaviour
 {
     public GameObject aiPrefab; // The AI prefab to spawn
-    [SerializeField]private int numberOfUnits; // Approximate number of AI units to spawn
+    [SerializeField]private int numberOfUnitsTotal; // number of units spawned in total
     public BoxCollider spawnArea; // BoxCollider defining the spawn area
+    private List<GameObject> unitsSpawned; // holds units currently spawned from this spawner
+    public int numUnits = 0;
+    public int damageObjective = 0;//for tracking damage to objective
+    public int damagePlayer = 0;//for tracking damage to player
+//******************************************************************************************************************************************
 
     void Start()
     {
-        if (numberOfUnits == 0) 
-        {
-            numberOfUnits = 5;
-        }
         spawnArea = GetComponent<BoxCollider>();
         if (spawnArea == null || aiPrefab == null)
         {
             Debug.LogError("Spawner requires a BoxCollider and AI prefab.");
             return;
         }
-
-        SpawnAI();
+        unitsSpawned = new List<GameObject>();
     }
 
-    private void SpawnAI()
+    private void Update()
     {
-        for (int i = 0; i < numberOfUnits; i++)
+        if (unitsSpawned != null)
+        {
+            foreach (GameObject go in unitsSpawned)
+            {
+                if (go.GetComponent<AmaiseAI>().currHealth <= 0)
+                {
+                    AmaiseAI tempAI = go.GetComponent<AmaiseAI>();
+                    damageObjective += tempAI.damageObjective;
+                    damagePlayer += tempAI.damagePlayer;
+                    unitsSpawned.Remove(go);
+                    despawnCoroutine(go);
+                }
+            }
+        }
+    }
+//******************************************************************************************************************************************
+    private IEnumerator despawnCoroutine(GameObject go)
+    {
+        yield return new WaitForSeconds(2);
+
+        if (go != null)
+        {
+            Destroy(go);
+        }
+        Debug.Log("units Despawned");
+    }
+
+    public void SpawnAI(int count,float oPrio,float pPrio)
+    {
+        for (int i = 0; i < count; i++)
         {
             Vector3 spawnPosition = GetRandomPointInSpawnArea();
 
             // makes sure spawn position is on NavMesh
             if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
             {
-                Instantiate(aiPrefab, hit.position, Quaternion.identity);
+                GameObject temp = null;
+                temp = (GameObject)Instantiate(aiPrefab, hit.position, Quaternion.identity); //instantiate unit
+                if (temp != null) { Debug.Log("temp assigned"); }
+                AmaiseAI tempAI = temp.GetComponent<AmaiseAI>();
+                unitsSpawned.Add(temp);     //add unit to internal list
+
+                tempAI.objectivePriority = oPrio; //set objective and playe priority
+                tempAI.playerPriority = pPrio;
                 Debug.Log($"AI spawned at: {hit.position}");
+                numUnits++; // increase currently spawned units
+                numberOfUnitsTotal++;// increase total spawned units
             }
             else
             {
@@ -43,7 +81,7 @@ public class AI_Spawner : MonoBehaviour
             }
         }
     }
-    // random spot generator(can produce overlapping models)
+    // random spot generator
     private Vector3 GetRandomPointInSpawnArea()
     {
         // Get the bounds of the BoxCollider
@@ -56,4 +94,7 @@ public class AI_Spawner : MonoBehaviour
 
         return new Vector3(x, y, z);
     }
+    
+        
+
 }
