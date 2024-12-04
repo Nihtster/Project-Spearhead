@@ -6803,7 +6803,7 @@ MonoBehaviour:
   audioSourceR: {fileID: 1476747426}
   roundsLeft: 120
   magSize: 12
-  fireRate: 0.5
+  fireRate: 0.35
   reloadTime: 3
   projectileSpeed: 100
 --- !u!114 &234104235
@@ -6829,7 +6829,7 @@ MonoBehaviour:
   audioSource: {fileID: 265055873}
   roundsLeft: 30
   magSize: 5
-  fireRate: 2.5
+  fireRate: 3
   reloadTime: 5
   projectileSpeed: 25
   fireDelay: 0.5
