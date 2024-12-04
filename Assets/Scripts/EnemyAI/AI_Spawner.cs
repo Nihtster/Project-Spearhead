@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,8 +5,6 @@ public class AI_Spawner : MonoBehaviour
 {
     public GameObject aiPrefab; // The AI prefab to spawn
     public BoxCollider spawnArea; // BoxCollider defining the spawn area
-    public int damageObjective = 0;//for tracking damage to objective
-    public int damagePlayer = 0;//for tracking damage to player
 //******************************************************************************************************************************************
 
     void Start()
@@ -36,7 +32,7 @@ public class AI_Spawner : MonoBehaviour
                 temp = (GameObject)Instantiate(aiPrefab, hit.position, Quaternion.identity); //instantiate unit
                 AmaiseAI tempAI = temp.GetComponent<AmaiseAI>();
 
-                tempAI.objectivePriority = oPrio; //set objective and playe priority
+                tempAI.objectivePriority = oPrio; //set objective and player priority
                 tempAI.playerPriority = pPrio;
                 Debug.Log($"AI spawned at: {hit.position}");
             }

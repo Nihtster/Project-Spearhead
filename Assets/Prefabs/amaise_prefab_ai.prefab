@@ -55,15 +55,20 @@ MonoBehaviour:
   player: {fileID: 0}
   objective: {fileID: 0}
   target: {fileID: 0}
+  lastSetDestination: {x: 0, y: 0, z: 0}
   currHealth: 0
+  lastAttackTime: 0
+  attackRange: 0
+  attackDamage: 0
   detectionRange: 500
   obstructionMask:
     serializedVersion: 2
     m_Bits: 128
-  canSeePlayer: 0
   playerPriority: 0
   objectivePriority: 0
   objectiveDestroyed: 0
+  firing: 0
+  canSeePlayer: 0
 --- !u!195 &178777848894474295
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -72,7 +77,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4805310715341171994}
   m_Enabled: 1
-  m_AgentTypeID: -334000983
+  m_AgentTypeID: 0
   m_Radius: 25
   m_Speed: 100
   m_Acceleration: 15

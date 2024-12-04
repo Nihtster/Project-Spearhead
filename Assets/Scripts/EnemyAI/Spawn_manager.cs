@@ -10,13 +10,13 @@ public class Spawn_manager : MonoBehaviour
 
     private int activeUnits = 0;
     private int unitsPerSpawner = 2;
-    [SerializeField] private float spawnDelay = 15f;
+    [SerializeField] private float spawnDelay = 60.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         compileSpawners();
-        spawnWave(2, .5f,.5f);
+        StartCoroutine(waveSpawnRoutine());
         spawners = new List<AI_Spawner> ();
     }
 
@@ -25,6 +25,11 @@ public class Spawn_manager : MonoBehaviour
 //******************************************************************************************************************************************
     private void compileSpawners()
     {
+        if (spawnObject.Length == 0)
+        {
+            Debug.LogError("No spawn objects assigned.");
+            return;
+        }
         foreach (GameObject spawner in spawnObject)
         {
             spawners.Add(spawner.GetComponent<AI_Spawner>());
@@ -32,25 +37,26 @@ public class Spawn_manager : MonoBehaviour
     }
     private void spawnWave(int numUnit,float oPrio,float pPrio)
     {
-        foreach(AI_Spawner spawner in spawners)
+        foreach (GameObject spawner in spawnObject)
         {
-            if (spawner.isActiveAndEnabled)
-            {
-                spawner.SpawnAI(numUnit, oPrio, pPrio);
-                activeUnits += numUnit;
-            }
+            Debug.Log("reaches spawn call");
+            spawner.GetComponent<AI_Spawner>().SpawnAI(numUnit, oPrio, pPrio);
+        }
+        Debug.Log($"Wave spawned: {numUnit * spawners.Count} units.");
+
+    }
+    public IEnumerator waveSpawnRoutine()
+    {
+        while (true) // Infinite loop to continuously spawn waves
+        {
+            spawnWave(unitsPerSpawner, 0.8f, 0.2f);
+            yield return new WaitForSeconds(spawnDelay);
+
+            // Optional: Adjust spawn delay for subsequent waves
+            spawnDelay = Mathf.Max(20.0f, spawnDelay * 0.85f); // Ensure a minimum spawn delay of 10 seconds
+            Debug.Log($"Next wave in {spawnDelay} seconds.");
         }
     }
-    public IEnumerator waveSpawnDelayRoutine()
-    {
-        yield return new WaitForSeconds(spawnDelay/12);
-        
-        spawnWave(unitsPerSpawner, .8f,.2f);
-
-        spawnDelay -= (int)(spawnDelay * .75);
-        Debug.Log("AI unit wave spawned, " + spawnDelay+" seconds until next spawn");
-        StopCoroutine(waveSpawnDelayRoutine());
-     }
  //******************************************************************************************************************************************
 
 
