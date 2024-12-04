@@ -141,28 +141,32 @@ public class AmaiseAI : MonoBehaviour
 //******************************************************************************************************************************************
     private void Attack(GameObject t)
     {
-        target = t;
-        Debug.Log(target.tag);
+        
                                                                // if already firing, will not fire again
         if (firing || t == null) 
         {
             return;
         }
+        target = t;
+        Debug.Log(target.tag);
         agent.isStopped = true;                                 // Stop movement while attacking
         firing = true;
-        StartCoroutine(attackCoroutine(t, stats.damage));  // Perform attack logic (e.g., deal damage to player)
+        StartCoroutine(attackCoroutine(target, (float)stats.damage));  // Perform attack logic (e.g., deal damage to player)
     }
     public IEnumerator attackCoroutine(GameObject t, float damage)
     {
         if (t.CompareTag("Objective"))          // attacking objective
         {
-            Debug.Log("Attacking Objective!");
+            
             t.GetComponent<Objective>().dmg(damage);
+            Debug.Log("Attacking Objective - successful");
         }
-        else if (t.CompareTag("Player"))      // attacking player
+        else if (t.name.Contains("Player"))      // attacking player
         {
-            Debug.Log("Attacking Player!");
+            PlayerController pl = t.GetComponent<PlayerController>();
+            if (pl == null) Debug.Log("PC null");
             t.GetComponent<PlayerController>().dmg(damage);
+            Debug.Log("Attacking Player - successful");
         }
         yield return new WaitForSeconds(stats.attackCooldown/12);
 
@@ -171,7 +175,6 @@ public class AmaiseAI : MonoBehaviour
     private IEnumerator ResumeMovementAfterAttack(float delay) // will delay resumption of movement
     {
         yield return new WaitForSeconds(delay/12);
-
         if (agent != null)
         {
             agent.isStopped = false;                        // Resume movement after the attack delay
@@ -187,13 +190,11 @@ public class AmaiseAI : MonoBehaviour
         Debug.Log("Objective destroyed. Prioritizing player.");
         objectivePriority = 0.0f;
         playerPriority = 1.0f;
-
         NormalizePriorities();
     }
 
     private void AdjustPriorities()
-    {
-                                                                                   
+    {                                                                         
         if (!CanSeePlayer())objectivePriority += 0.1f;
         else playerPriority += .1f;
         NormalizePriorities();

@@ -10,7 +10,7 @@ public class Spawn_manager : MonoBehaviour
 
     private int activeUnits = 0;
     private int unitsPerSpawner = 2;
-    [SerializeField] private int spawnDelay = 15;
+    [SerializeField] private float spawnDelay = 15f;
 
     // Start is called before the first frame update
     void Start()
@@ -34,13 +34,16 @@ public class Spawn_manager : MonoBehaviour
     {
         foreach(AI_Spawner spawner in spawners)
         {
-            spawner.SpawnAI(numUnit, oPrio, pPrio);
-            activeUnits += numUnit;
+            if (spawner.isActiveAndEnabled)
+            {
+                spawner.SpawnAI(numUnit, oPrio, pPrio);
+                activeUnits += numUnit;
+            }
         }
     }
     public IEnumerator waveSpawnDelayRoutine()
     {
-        yield return new WaitForSeconds(spawnDelay);
+        yield return new WaitForSeconds(spawnDelay/12);
         
         spawnWave(unitsPerSpawner, .8f,.2f);
 

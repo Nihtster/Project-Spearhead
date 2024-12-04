@@ -13,7 +13,7 @@ public class Objective : MonoBehaviour
     [SerializeField] private Camera playerCam;
     [SerializeField] private string Name = "Base";
     [SerializeField] private float Health = 100;
-    protected float curHealth;
+    [SerializeField] protected float curHealth;
     protected bool alerted = false;
     protected bool destroyed = false;
     protected bool disabled = false;
