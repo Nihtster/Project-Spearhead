@@ -8,62 +8,20 @@ public class Spawn_manager : MonoBehaviour
     [SerializeField] GameObject[] spawnObject;
     [SerializeField] List<AI_Spawner> spawners;
 
-    private float objectivePrioTotal = 6f;
-    private float playerPrioTotal = 6f;
-    private float objectiveDamage = 1f;
-    private float playerDamage = 1f;
     private int activeUnits = 0;
     private int unitsPerSpawner = 2;
-    private float newObjPrio = .4f;
-    private float newPlayerPrio = .6f;
-    private bool spawnersCompiled = false;
+    [SerializeField] private int spawnDelay = 15;
 
     // Start is called before the first frame update
     void Start()
     {
         compileSpawners();
-        spawnWave(2, .4f,.6f);
+        spawnWave(2, .5f,.5f);
         spawners = new List<AI_Spawner> ();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (spawnersCompiled)
-        {
-
-            AI_Spawner temp = null;
-            foreach (AI_Spawner spawner in spawners)
-            {
-                temp = spawner;
-                if (spawner.numUnits == 0)
-                {
-                    objectiveDamage += spawner.damageObjective;
-                    playerDamage += spawner.damagePlayer;
-                    spawner.damageObjective = 0;
-                    spawner.damagePlayer = 0;
-                    activeUnits -= unitsPerSpawner;
-                    break;
-                }
-            }
-            if(temp != null && temp.damagePlayer == 0)
-            {
-                spawners.Remove(temp);
-            }
-        }
-        if(spawners.Count == 0)
-        {
-            float oPrio = calcObjectivePrio(unitsPerSpawner);
-            float pPrio = calcPlayerPrio(unitsPerSpawner);
-            float total = oPrio + pPrio;
-            oPrio /= total;
-            pPrio /= total;
-            newObjPrio = oPrio;
-            newPlayerPrio = pPrio;
-            waveSpawnDelayRoutine();
-        }
-
-    }
+    
 //******************************************************************************************************************************************
     private void compileSpawners()
     {
@@ -71,7 +29,6 @@ public class Spawn_manager : MonoBehaviour
         {
             spawners.Add(spawner.GetComponent<AI_Spawner>());
         }
-        spawnersCompiled = true;
     }
     private void spawnWave(int numUnit,float oPrio,float pPrio)
     {
@@ -83,25 +40,16 @@ public class Spawn_manager : MonoBehaviour
     }
     public IEnumerator waveSpawnDelayRoutine()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(spawnDelay);
         
+        spawnWave(unitsPerSpawner, .8f,.2f);
 
-        spawnWave(unitsPerSpawner, newObjPrio, newPlayerPrio);
-        objectiveDamage = 0;
-        playerDamage = 0;
-        objectivePrioTotal = 0;
-        playerPrioTotal = 0;
-        Debug.Log("AI units spawned");
+        spawnDelay -= (int)(spawnDelay * .75);
+        Debug.Log("AI unit wave spawned, " + spawnDelay+" seconds until next spawn");
+        StopCoroutine(waveSpawnDelayRoutine());
      }
  //******************************************************************************************************************************************
-    private float calcObjectivePrio(int units)
-    {
-        return (objectivePrioTotal / (unitsPerSpawner * 6))*(objectiveDamage/(playerDamage+objectiveDamage));
-    }
-    private float calcPlayerPrio(int units)
-    {
-        return (playerPrioTotal/(unitsPerSpawner * 6))*(playerDamage / (playerDamage + objectiveDamage));
-    }
+
 
 
 }

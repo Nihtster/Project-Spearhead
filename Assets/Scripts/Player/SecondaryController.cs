@@ -111,7 +111,7 @@ public class SecondaryController : MonoBehaviour
         foreach (RaycastHit hit in hits)
         {
             GameObject obj = hit.collider.gameObject;
-            if(obj.name == "amaise_prefab_ai") {
+            if(obj.name.Contains("amaise_prefab_ai")) {
                 AmaiseAI enemy = obj.GetComponent<AmaiseAI>();
                 enemy.dmg(DMG);
             }

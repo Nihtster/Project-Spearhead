@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Image hurt_overlay;
     [SerializeField] private float health = 100f;
     private int interval = 2; // health / interval = # of health bars
-    private float curHealth;
+    [SerializeField] private float curHealth;
 
     private void death() 
     {

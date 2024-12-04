@@ -66,6 +66,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a9e7d31d8d3a643af80f3d32098128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aiPrefab: {fileID: 6800924122365571022, guid: eff302e9ec217a84c899eddca3b7c0dd, type: 3}
-  numberOfUnits: 5
+  aiPrefab: {fileID: 4805310715341171994, guid: 2fdc35337475c874596750ed6b27d15c, type: 3}
   spawnArea: {fileID: 0}
+  unitsSpawned: []
+  numUnits: 0
+  damageObjective: 0
+  damagePlayer: 0
