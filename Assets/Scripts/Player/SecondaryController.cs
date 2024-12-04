@@ -9,7 +9,7 @@ public class SecondaryController : MonoBehaviour
     [SerializeField] private TMP_Text ammoInterface;
     [SerializeField] private GameObject secondaryWeaponL;
     [SerializeField] private GameObject secondaryWeaponR;
-    [SerializeField] private GameObject fx;
+    // [SerializeField] private GameObject fx;
     [SerializeField] private Camera cam;
     [SerializeField] private AudioClip reloadSFX;
     [SerializeField] private AudioClip fireSFX; // Audio for firing
@@ -116,7 +116,7 @@ public class SecondaryController : MonoBehaviour
                 enemy.dmg(DMG);
             }
             // If the ray hits something, instantiate the visual effect (impact)
-            Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
+            // Instantiate(fx, hit.point, Quaternion.LookRotation(hit.normal));
 
             // Play the impact sound
             PlaySound(impactSFX);

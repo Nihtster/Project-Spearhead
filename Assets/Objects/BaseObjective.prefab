@@ -114,7 +114,6 @@ GameObject:
   - component: {fileID: 3648636472826062180}
   - component: {fileID: 3945889251428174803}
   - component: {fileID: 1481839084638123256}
-  - component: {fileID: 8948487599588069450}
   m_Layer: 8
   m_Name: BaseObjective
   m_TagString: Objective
@@ -209,25 +208,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8948487599588069450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4924601119130402175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7278fcde9d6eea4980924593489a27c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  dmgAlert: {fileID: 8300000, guid: 105324cc75102354db7efe2f3e75120e, type: 3}
-  text_interface: {fileID: 2129225597189930383}
-  bg_hp_indicator: {fileID: 8368015096020825160}
-  playerCam: {fileID: 0}
-  Name: Base
-  Health: 100
 --- !u!1 &4986727207174063909
 GameObject:
   m_ObjectHideFlags: 0
