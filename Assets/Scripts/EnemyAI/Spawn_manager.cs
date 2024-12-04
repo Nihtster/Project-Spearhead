@@ -5,8 +5,10 @@ using UnityEngine;
 public class Spawn_manager : MonoBehaviour
 {
 
+    [SerializeField] PlayerController ply;
     [SerializeField] GameObject[] spawnerObject;
 
+    private int curWave = 1;
     private int activeUnits = 0;
     private int unitsPerSpawner = 2;
     [SerializeField] private float spawnDelay = 60.0f;
@@ -43,6 +45,8 @@ public class Spawn_manager : MonoBehaviour
         {
             spawnWave(unitsPerSpawner, 0.8f, 0.2f);
             yield return new WaitForSeconds(spawnDelay);
+            ++curWave;
+            ply.updateWave(curWave);
 
             // Optional: Adjust spawn delay for subsequent waves
             spawnDelay = Mathf.Max(20.0f, spawnDelay * 0.85f); // Ensure a minimum spawn delay of 10 seconds

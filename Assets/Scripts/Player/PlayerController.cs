@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerMovement movementController;
     [SerializeField] private Canvas loss_interface;
     [SerializeField] private TMP_Text health_interface;
+    [SerializeField] private TMP_Text wave_indicator;
     [SerializeField] private Image hurt_overlay;
     [SerializeField] private float health = 100f;
     private float curHealth;
@@ -93,5 +94,11 @@ public class PlayerController : MonoBehaviour
     public bool isAlive()
     {
         return alive;
+    }
+
+    public int updateWave(int wave)
+    {
+        wave_indicator.text = "WAVE " + wave;
+        return wave;
     }
 }
